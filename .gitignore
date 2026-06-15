@@ -142,3 +142,6 @@ specs/
 .harness/
 
 .mcp.json
+
+# Reference copy of maestro project (used during integration)
+/maestro/
