@@ -32,4 +32,7 @@ export const QUERY_KEYS = {
   episodeProfiles: ['podcasts', 'episode-profiles'] as const,
   speakerProfiles: ['podcasts', 'speaker-profiles'] as const,
   languages: ['languages'] as const,
+  missions: ['missions'] as const,
+  mission: (id: string) => ['missions', id] as const,
+  missionNotes: (id: string) => ['missions', id, 'notes'] as const,
 }

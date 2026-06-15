@@ -1,0 +1,32 @@
+-- Migration 15: Deep Research feature - research missions and notes
+
+DEFINE TABLE IF NOT EXISTS research_mission SCHEMAFULL;
+DEFINE FIELD IF NOT EXISTS title ON TABLE research_mission TYPE string;
+DEFINE FIELD IF NOT EXISTS query ON TABLE research_mission TYPE string;
+DEFINE FIELD IF NOT EXISTS notebook_id ON TABLE research_mission TYPE option<record<notebook>>;
+DEFINE FIELD IF NOT EXISTS status ON TABLE research_mission TYPE option<string> DEFAULT "planning";
+DEFINE FIELD IF NOT EXISTS depth ON TABLE research_mission TYPE option<string> DEFAULT "comprehensive";
+DEFINE FIELD IF NOT EXISTS plan ON TABLE research_mission TYPE option<object>;
+DEFINE FIELD IF NOT EXISTS report ON TABLE research_mission TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS summary ON TABLE research_mission TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS execution_log ON TABLE research_mission TYPE option<array> DEFAULT [];
+DEFINE FIELD IF NOT EXISTS model_override ON TABLE research_mission TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS progress ON TABLE research_mission TYPE option<int> DEFAULT 0;
+DEFINE FIELD IF NOT EXISTS error_message ON TABLE research_mission TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS created ON research_mission DEFAULT time::now() VALUE $before OR time::now();
+DEFINE FIELD IF NOT EXISTS updated ON research_mission DEFAULT time::now() VALUE time::now();
+
+DEFINE TABLE IF NOT EXISTS research_note SCHEMAFULL;
+DEFINE FIELD IF NOT EXISTS mission_id ON TABLE research_note TYPE record<research_mission>;
+DEFINE FIELD IF NOT EXISTS phase ON TABLE research_note TYPE string;
+DEFINE FIELD IF NOT EXISTS content ON TABLE research_note TYPE string;
+DEFINE FIELD IF NOT EXISTS source_type ON TABLE research_note TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS source_url ON TABLE research_note TYPE option<string>;
+DEFINE FIELD IF NOT EXISTS metadata ON TABLE research_note TYPE option<object>;
+DEFINE FIELD IF NOT EXISTS created ON research_note DEFAULT time::now() VALUE $before OR time::now();
+DEFINE FIELD IF NOT EXISTS updated ON research_note DEFAULT time::now() VALUE time::now();
+
+DEFINE INDEX IF NOT EXISTS idx_research_mission_status ON TABLE research_mission FIELDS status;
+DEFINE INDEX IF NOT EXISTS idx_research_mission_notebook ON TABLE research_mission FIELDS notebook_id;
+DEFINE INDEX IF NOT EXISTS idx_research_note_mission ON TABLE research_note FIELDS mission_id;
+DEFINE INDEX IF NOT EXISTS idx_research_note_phase ON TABLE research_note FIELDS phase;
